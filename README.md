@@ -65,7 +65,6 @@
 &emsp;&emsp;(5)连线要精简，尽可能短和少拐弯。  
 &emsp;&emsp;(6)外框尽量方正，预留好安装孔。  
 &emsp;&emsp;由于时间关系，本次比赛的放大电路部分用了之前在立创打好的PCB板，其他部分是在洞洞板上手动焊接而成。  
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![PCB焊接.jpg](//image.lceda.cn/pullimage/1FYhMuZla2TF3GsZd77o02WQg7SmsAz5dQ8rSe3z.jpeg)
 
 ## 6.实物展示
 &emsp;&emsp;演示视频过大投稿至b站[演示视频](https://www.bilibili.com/video/BV1wP4y1H7mS/)。  
