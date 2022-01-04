@@ -42,22 +42,18 @@
 ### 3.3 分析
 &emsp;&emsp;本题要求用于信号失真度测量的主控制器和数据采集器必须使用 TI 公司的MCU及其片内ADC，不得使用其他片外ADC和数据采集模块（卡）成品，故信号采集模块的MCU均在TI公司生产的处理器系列中选择。  
 &emsp;&emsp;考虑到题目要求测量的最高信号频率为100kHz，五次谐波满足奈奎斯特采样定理需要采样频率达到1MHz，故选择C2000系列处理器作为主控芯片，并使用其片内ADC进行采样。C2000是TI公司生产的32位高性能实时微控制器，具有片内12位ADC，主时钟频率可达到200MHz，运行速度比较快，实时性比较好。由于实验室中正好有28379D的开发板，故选择此开发板。开发板资料见[LAUNCHXL-F28379D](https://www.ti.com.cn/tool/cn/LAUNCHXL-F28379D)。  
-![28379D开发板.png](//image.lceda.cn/pullimage/1mwPK4xAemmRUcPm3N1tFmuIGJbThyK4Nz7ue3a4.png)
 &emsp;&emsp;对于数据处理部分采用频域分析方法，对ADC采样值做FFT变换，得到信号中不同频率的幅值大小，代入THD计算公式得到失真度大小。该方案硬件成本低，电路简单。  
 
 ## 4.原理图电路分析
 &emsp;&emsp;本次作品中电路均使用立创EDA设计，完整电路图见附件5。但仅有输入信号处理部分进行了打样（使用17年电赛设计的板子gerber文件见附件6）。
-![Schematic_2021年A题-信号失真度测量装置_2021-12-09.png](//image.lceda.cn/pullimage/zzxfqqWNke03FDOUirJQhiQspDdxYeBTk9wfOVxk.png)
 ### 4.1隔直放大电路
 &emsp;&emsp;如图，输入信号处理电路由RC滤波电路和同相加法器电路共同组成：在同相加法器的前面接入RC高通滤波器，将信号中可能含有的直流成分滤掉，然后再利用同相加法器将隔直后的信号抬升并放大。同相加法器电路由TI的运算放大器OPA227构成，OPA227运算放大器兼具低噪声、宽带宽和高精度等特性，是同时需要交流和精密直流性能应用的理想选择。  
-![隔直放大电路.png](//image.lceda.cn/pullimage/rRFlsMKhsoR8F157Ci4VwrsmaV8nlvkuG9LLoZQf.png)
 &emsp;&emsp;由于题目要求输入信号的频率范围为1kHz-100kHz，峰峰值电压范围为300mV-600mV, 故RC滤波器的截频要小于1kHz，故电路图中电容器件C29取1uF，电阻器件R43取10kΩ。  
 &emsp;&emsp;令R46=R45=R42=R,则同相加法器的输出电压为U0=(R41+R)/2R (U_1+U_2 ),其中U1为输入信号电压，U2为电阻分压得到的输入加法器的直流电压,约为0.33V。该电路的放大倍数：Au=(R41+R)/2R=(7k+1k)/(2×1k)=4。放大后的信号满足单片机电压采样范围0~3.3V。  
 
 ### 4.2迟滞比较器电路
 &emsp;&emsp;由于提高部分要求输入信号的频率范围为1kHz~100kHz，在输入信号的频率未知情况下无法确定采样率，故利用迟滞比较器将输入的信号转变成方波，得到基波频率，进而确定采样频率然后进行后续处理。  
 &emsp;&emsp;迟滞比较器电路是使用TI的比较器LM339构成的，LM339比较器可在宽电压范围内由单电源供电，漏极电流不受电源电压的影响。迟滞比较器是一个具有迟滞回环传输特性的比较器,在反相输入单门限电压比较器的基础上引入正反馈网络，就组成了具有双门限值的反相输入迟滞比较器。  
-![迟滞比较器电路.png](//image.lceda.cn/pullimage/0CLgGtjql8mjLK1o04hBwp8Z1mONH5GJBHrf17m5.png)  
 &emsp;&emsp;电路如图所示，R3与R4分压得到参考电压Vr=1.35V，R2与R1的比例及Vr决定了高低电平阈值电压，令R2/R1=10，得到高电平阈值电压约为1.5V，低电平阈值电压约为1.2V，满足输入信号的转换方波的阈值电平要求。    
 
 ## 5.PCB设计分析
@@ -73,11 +69,9 @@
 
 ## 6.实物展示
 &emsp;&emsp;演示视频过大投稿至b站[演示视频](https://www.bilibili.com/video/BV1wP4y1H7mS/)。  
-![作品图.jpg](//image.lceda.cn/pullimage/lwlDsU9VdIL5WsUpGdM5jReG3vJbnUkbe1mJbYrz.jpeg)
 
 ## 7.作品装配
 &emsp;&emsp;如图，红框部分是迟滞比较器部分，黄框部分是正负电源和地，蓝框部分是串口部分，左边蓝框接串口屏，右边蓝框接蓝牙。模块位置是考虑了所连接单片机引脚的位置，按照就近原则放置。装配的顺序是先焊好迟滞比较器电路和输入部分电路，然后焊接放置单片机的排母，最后引出串口排针。  
-![作品装配.png](//image.lceda.cn/pullimage/JmExd0xG24D2E5ctTAi1nw6Xrn8mut5inwfdAYdT.png#pic_center)  
 &emsp;&emsp;主要模块购买链接如下：  
 &emsp;&emsp;[开发板](https://detail.tmall.com/item.htm?spm=a230r.1.14.27.6eca3d562tw6fJ&id=624725872138&ns=1&abbucket=15&skuId=4425672800866)  
 &emsp;&emsp;[串口屏](https://item.taobao.com/item.htm?spm=a1z09.2.0.0.54212e8dtdHvrJ&id=630642252956&_u=92nrab05ce14)  
